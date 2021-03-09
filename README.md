@@ -23,7 +23,11 @@ You will also need to spawn the backup somehow. There should be a way to spawn p
  - Windows: `start "title" [program_name]`. Note that you _must_ specify a title
  - OSX: `osascript -e 'tell app "Terminal" to do script ["terminal command"]'`
  
-(Linux tip: You can prevent a spawned terminal window from automatically closing by going to Edit -> Profile Preferences -> Title and Command -> When command exits. Windows tip: Use `start "title" call [program_name]`)
+Some OS or Language-specific tips:
+ - Linux  You can prevent a spawned terminal window from automatically closing by going to Edit -> Profile Preferences -> Title and Command -> When command exits. 
+ - Windows: Use `start "title" call [program_name]`
+ - Golang: [`exec.Command` takes its arguments oddly](https://golang.org/pkg/os/exec/#Command), so you will have to separate out the program and its arguments. And use [backticks for raw strings](https://golang.org/ref/spec#String_literals).  
+   Example: ``exec.Command("osascript", "-e", `tell app "Terminal" to do script "go run ` + filename + `.go"`)``
 
 Be careful! You don't want to create a [chain reaction](http://en.wikipedia.org/wiki/Fork_bomb)... If you do, you can use `pkill -f program_name` (Windows: `taskkill /F /IM program_name /T`) as a sledgehammer. Start with long periods and timeouts, so you have time to react if something goes wrong... And remember: *It's not murder if it's robots*.
 
